@@ -1,6 +1,6 @@
 #!/bin/bash
-source /opt/buildpiper/shell-functions/functions.sh
-source /opt/buildpiper/shell-functions/log-functions.sh
+source functions.sh
+source log-functions.sh
 
 logInfoMessage "I'll generate SBOM file at [${WORKSPACE}/${CODEBASE_DIR}]"
 

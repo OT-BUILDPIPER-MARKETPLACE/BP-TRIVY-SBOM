@@ -1,6 +1,6 @@
 #!/bin/bash
-source /opt/buildpiper/shell-functions/functions.sh
-source /opt/buildpiper/shell-functions/log-functions.sh
+source functions.sh
+source log-functions.sh
 
 logInfoMessage "I'll generate report at [${WORKSPACE}/${CODEBASE_DIR}]"
 
@@ -35,23 +35,23 @@ else
     logInfoMessage "    trivy sbom -s ${SCAN_SEVERITY} -o report/${OUTPUT_ARG} -f ${FORMAT_ARG} --exit-code 1 report/${SBOM_REPORT_NAME}"
     # trivy sbom -s ${SCAN_SEVERITY} -o report/${OUTPUT_ARG} -f ${FORMAT_ARG} --exit-code 1 report/${SBOM_REPORT_NAME}
     trivy sbom -s ${SCAN_SEVERITY} -o report/${OUTPUT_ARG} -f ${FORMAT_ARG} --exit-code 1 report/${SBOM_REPORT_NAME}
-
     STATUS=`echo $?`
 fi
 
 if [ $STATUS -eq 0 ]
 then
   logInfoMessage "Congratulations Trivy SBOM scan succeeded!!!"
-  ls -al report/
   cat report/${OUTPUT_ARG}
   generateOutput ${ACTIVITY_SUB_TASK_CODE} true "Congratulations Trivy SBOM scan succeeded!!!"
 
 elif [ $VALIDATION_FAILURE_ACTION == "FAILURE" ]
   then
     logErrorMessage "Please check Trivy SBOM scan failed!!!"
+    cat report/${OUTPUT_ARG}
     generateOutput ${ACTIVITY_SUB_TASK_CODE} false "Please check Trivy SBOM scan failed!!!"
     exit 1
    else
     logWarningMessage "Please check Trivy SBOM scan failed!!!"
+    cat report/${OUTPUT_ARG}
     generateOutput ${ACTIVITY_SUB_TASK_CODE} true "Please check Trivy SBOM scan failed!!!"
 fi
